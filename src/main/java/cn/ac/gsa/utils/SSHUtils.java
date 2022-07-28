@@ -2,15 +2,14 @@ package cn.ac.gsa.utils;
 
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;
+import cn.ac.gsa.send.SendWe;
 import com.jcraft.jsch.*;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Vector;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,6 +45,9 @@ public class SSHUtils {
             this.remoteport = port;
             this.getConnection(ip,username,pwd);
         } catch (Exception e) {
+            SendWe.sendLog("ChenXu","IP："+ip+"，无法链接");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
             e.printStackTrace();
         }
     }
@@ -64,6 +66,9 @@ public class SSHUtils {
             logined = true;
 
         } catch (JSchException e) {
+            SendWe.sendLog("ChenXu","IP："+remoteip+"，无法链接");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
             logined = false;
             throw new Exception("try connect failed  "+ SSHUtils.remoteip +",username: "+ SSHUtils.remoteusername +",password: "+ SSHUtils.remotepasswd);//+",port: "+remoteport);
         }
@@ -95,6 +100,9 @@ public class SSHUtils {
             //SSHUtils.getInstance().closeSession();
 
         } catch (Exception e) {
+            SendWe.sendLog("ChenXu","IP："+remoteip+"，无法下载请确认权限");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
             res = -1;
             System.err.println("远程连接失败......");
             e.printStackTrace();
@@ -109,7 +117,7 @@ public class SSHUtils {
         channelSftp.connect();
         // 显示目录信息
         Vector ls = channelSftp.ls(directory);
-        System.out.println("5、" + ls);
+        //System.out.println("5、" + ls);
         // 切断连接
         channelSftp.exit();
         return ls;
