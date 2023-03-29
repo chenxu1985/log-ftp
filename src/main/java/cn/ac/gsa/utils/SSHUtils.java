@@ -56,7 +56,7 @@ public class SSHUtils {
         if (logined) { return;}
         JSch jSch = new JSch();
         try {
-            session = jSch.getSession(SSHUtils.remoteusername, SSHUtils.remoteip, DEFAULT_PORT);
+            session = jSch.getSession(SSHUtils.remoteusername, SSHUtils.remoteip, remoteport);
             session.setPassword(SSHUtils.remotepasswd);
 
             Properties config = new Properties();

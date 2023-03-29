@@ -1,5 +1,6 @@
 package cn.ac.gsa.controller;
 
+import cn.ac.gsa.send.SendEmail;
 import cn.ac.gsa.send.SendWe;
 import cn.ac.gsa.utility.SSHUtil;
 import cn.ac.gsa.utils.SSHUtils;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -87,10 +90,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.20，gsa日志获取失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，gsa日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("GSA log trans ok");
     }
@@ -105,10 +106,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.19，2019nCoVRlogs日志获取失败请联系邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.19，2019nCoVRlogs日志获取失败请联系邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("Ncov log trans ok");
     }
@@ -123,10 +122,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.20，project日志获取失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，project日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("project log trans ok");
     }
@@ -141,10 +138,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.20，sample日志获取失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，sample日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("sample log trans ok");
     }
@@ -159,10 +154,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.16，database日志获取失败请联系英克，邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.16，database日志获取失败请联系英克，邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("database log trans ok");
     }
@@ -170,17 +163,15 @@ public class logFtpController {
     public void dogAllLog(@PathVariable(value = "begin") String begin) {
         try {
             SSHUtils gsa = new SSHUtils("192.168.164.17", "datatrans", "7Tran6S%2021ngDC!", 22);
-            String path = "/data1/webdb/webServer_idog/apache-tomcat-8.5.66_dogsdv3/logs";
+            String path = "/data1/webdb/webServer_idog/update/apache-tomcat-8.5.82_dogsdv3/logs";
             String toPath = "/disk/webdb/csdb/logs/doglogs";
             Vector logList= gsa.listFiles(path);
             HashMap nameMap= getGsaNameMap(logList,"localhost_dogsdv3_access_log");
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.17，dog日志获取失败请联系唐碧霞");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.17，dog日志获取失败请联系唐碧霞"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("dog log trans ok");
     }
@@ -195,10 +186,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.19，edk日志获取失败请联系邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.19，edk日志获取失败请联系邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("edk log trans ok");
     }
@@ -213,10 +202,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.20，human日志获取失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，human日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("human log trans ok");
     }
@@ -231,10 +218,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.20，gsub日志获取失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，gsub日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("gsub log trans ok");
     }
@@ -245,14 +230,12 @@ public class logFtpController {
             String path = "/disk1/webdb/webApplications/logs/gvm_net1";
             String toPath = "/disk/webdb/csdb/logs/gvmlogs";
             Vector logList= gsa.listFiles(path);
-            HashMap nameMap= getGsaNameMap(logList,"gvm_access_log");
+            HashMap nameMap= getGsaNameMap(logList,"gvm_access_log2");
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.14，gvm日志获取失败请联系唐碧霞");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.14，gvm日志获取失败请联系唐碧霞"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("Gvm log trans ok");
     }
@@ -267,10 +250,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.14，gwas日志获取失败请联系冬梅");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.14，gwas日志获取失败请联系冬梅"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("gwas log trans ok");
     }
@@ -285,10 +266,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.91，gwh日志获取失败请联系马英克");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.91，gwh日志获取失败请联系马英克"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("Gwh log trans ok");
     }
@@ -303,10 +282,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.16，ic4r日志获取失败请联系英克，邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.16，ic4r日志获取失败请联系英克，邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("ic4r log trans ok");
     }
@@ -321,10 +298,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.16，lgc日志获取失败请联系英克，邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.16，lgc日志获取失败请联系英克，邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("lgc log trans ok");
     }
@@ -339,10 +314,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.19，methbank日志获取失败请联系邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.19，methbank日志获取失败请联系邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("methbank log trans ok");
     }
@@ -357,10 +330,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.19，ngdc1日志获取失败请联系邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.19，ngdc1日志获取失败请联系邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("ngdcP1 log trans ok");
     }
@@ -375,10 +346,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.16，ngdc2日志获取失败请联系邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.16，ngdc2日志获取失败请联系邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("ngdcP2 log trans ok");
     }
@@ -386,17 +355,15 @@ public class logFtpController {
     public void redAllLog(@PathVariable(value = "begin") String begin){
         try {
             SSHUtils gsa = new SSHUtils("192.168.164.23", "bigd", "HzDy0105$Gyy", 22);
-            String path = "/wrd/srv/ic4r-expression/tomcat8/logs";
+            String path = "/wrd/srv/ic4r-expression/tomcat9068/logs";
             String toPath = "/disk/webdb/csdb/logs/redlogs";
             Vector logList= gsa.listFiles(path);
             HashMap nameMap= getGsaNameMap(logList,"red_access");
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.23，red日志获取失败请联系邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.23，red日志获取失败请联系邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("Red log trans ok");
     }
@@ -411,10 +378,8 @@ public class logFtpController {
             int v = downloadFile(path,toPath,begin,gsa,nameMap);
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.23，ped日志获取失败请联系邹东");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.23，ped日志获取失败请联系邹东"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("Ped log trans ok");
     }
@@ -438,17 +403,15 @@ public class logFtpController {
 		}
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.13，ftp123日志获取失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.13，ftp123日志获取失败"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("123 log trans ok");
     }
     @GetMapping("/log-ftp124/{begin}")
     public void ftp124AllLog(@PathVariable(value = "begin") String begin){
         try {
-            SSHUtils gsa = new SSHUtils("192.168.166.14", "ftpTransfer", "ftpliyD#124#2022@", 22);
+            SSHUtils gsa = new SSHUtils("192.168.166.14", "ftpTransfer", "ftpTra¥124%2023@", 22);
             String path = "/var/log/vsftpd/";
             String toPath1 = "/disk/webdb/csdb/logs/ftp124logs";
             String toPath2 = "/disk/webdb/csdb/logs/ftpngdc124logs";
@@ -465,10 +428,8 @@ public class logFtpController {
             }
             gsa.closeSession();
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.14，ftp124日志获取失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.14，ftp124日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("124 log trans ok");
     }
@@ -502,7 +463,7 @@ public class logFtpController {
                         cmdDog = "/disk/webdb/csdb/logs/doglogs/localhost_dogsdv3_access_log."+strDate+".txt";
                     }
                 }
-                String cmdGvm = "/disk/webdb/csdb/logs/gvmlogs/gvm_access_log."+strDate+".log";
+                String cmdGvm = "/disk/webdb/csdb/logs/gvmlogs/gvm_access_log2."+strDate+".log";
                 String cmd = "cat "+cmdGsa+" "+cmdGwh+" "+cmdDog+" "+cmdGvm+" >"+path+"/"+fileName +" &";
                 System.out.println(cmd);
                 gsa.execCommandByJSch(cmd);
@@ -511,10 +472,8 @@ public class logFtpController {
             gsa.closeSession();
             System.out.println("rice log trans ok");
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.130.12，loginfo日志整合失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.130.12，loginfo日志整合失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
     }
     @GetMapping("/log-bigdinfo/{begin}")
@@ -537,7 +496,7 @@ public class logFtpController {
                     cmdGsa = "/disk/webdb/csdb/logs/gsalogs/big_gsav2_access."+strDate+".log";
                 }
                 String cmdGwh = "/disk/webdb/csdb/logs/gwhlogs/gwh_access_log."+strDate+".log";
-                String cmdGvm = "/disk/webdb/csdb/logs/gvmlogs/gvm_access_log."+strDate+".log";
+                String cmdGvm = "/disk/webdb/csdb/logs/gvmlogs/gvm_access_log2."+strDate+".log";
                 String cmdMeth = "/disk/webdb/csdb/logs/methbanklogs/methbank_access_."+strDate+".log";
                 File logMeth = new File(cmdMeth);
                 if(!logMeth.exists()){
@@ -552,10 +511,8 @@ public class logFtpController {
             gsa.closeSession();
             System.out.println("bigd log trans ok");
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.130.12，bigdinfo日志整合失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.130.12，bigdinfo日志整合失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
     }
     @GetMapping("/log-ngdcinfo/{begin}")
@@ -583,7 +540,7 @@ public class logFtpController {
                 if(!logMeth.exists()){
                     cmdMeth =  "/disk/webdb/csdb/logs/methbanklogs/methbank_v5_access_."+strDate+".log";
                 }
-                String cmdGvm = "/disk/webdb/csdb/logs/gvmlogs/gvm_access_log."+strDate+".log";
+                String cmdGvm = "/disk/webdb/csdb/logs/gvmlogs/gvm_access_log2."+strDate+".log";
                 String cmdngdc1 = "/disk/webdb/csdb/logs/ngdcP1logs/bigd_access."+strDate+".log";
                 String cmdngdc2 = "/disk/webdb/csdb/logs/ngdcP2logs/bigd_access."+strDate+".log";
                 String cmdncovr = "/disk/webdb/csdb/logs/2019nCoVRlogs/ncovr_access_."+strDate+".log";
@@ -625,10 +582,8 @@ public class logFtpController {
             gsa.closeSession();
             System.out.println("ngdc log trans ok");
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.130.12，ngdc日志整合失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.130.12，ngdc日志整合失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
     }
     @GetMapping("/log-ftp/{begin}")
@@ -651,10 +606,8 @@ public class logFtpController {
             gsa.closeSession();
             System.out.println("ftp log trans ok");
         } catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.130.12，Ftp日志整合失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.130.12，Ftp日志整合失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
     }
     @GetMapping("/log-ngdcftp/{begin}")
@@ -677,10 +630,8 @@ public class logFtpController {
             gsa.closeSession();
             System.out.println("ngdcftp log trans ok");
         }catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.130.12，ngdcFtp日志整合失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.130.12，ngdcFtp日志整合失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
     }
     private List<Date> getBetweenDates(Date begin, Date end) {
@@ -694,7 +645,10 @@ public class logFtpController {
                 result.add(tempStart.getTime());
                 tempStart.add(Calendar.DAY_OF_YEAR, 1);
             }*/
-        while(begin.getTime()<=end.getTime()){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        Date yesterday = calendar.getTime();
+        while(begin.getTime()<=yesterday.getTime()){
             result.add(tempStart.getTime());
             tempStart.add(Calendar.DAY_OF_YEAR, 1);
             begin = tempStart.getTime();
@@ -832,10 +786,8 @@ public class logFtpController {
                 }
             }
         }catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.20，gsaUpload文件备份失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，gsaUpload文件备份失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
     }
     @Scheduled(cron = "0 0 2 * * ?")
@@ -877,10 +829,8 @@ public class logFtpController {
                 }
             }
         }catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.20，gsaSampleUpload文件备份失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，gsaSampleUpload文件备份失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
     }
     @Scheduled(cron = "0 0 3 * * ?")
@@ -922,11 +872,16 @@ public class logFtpController {
                 }
             }
         }catch (Exception e) {
-            SendWe.sendLog("ChenXu","IP：192.168.164.20，gsaHumanUpload文件备份失败请联系陈旭");
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            System.out.println("定时任务执行时间：" + dateFormat.format(new Date()));
-            e.printStackTrace();
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，gsaHumanUpload文件备份失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
     }
+    public static String getStackTraceInfo(Throwable ex){
+        StringWriter sw=new StringWriter();
 
+        try(PrintWriter pw=new PrintWriter(sw);){
+            ex.printStackTrace(pw);
+            return sw.toString();
+        }
+    }
 }
