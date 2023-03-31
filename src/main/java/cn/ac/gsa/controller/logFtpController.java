@@ -162,7 +162,7 @@ public class logFtpController {
     @GetMapping("/log-dog/{begin}")
     public void dogAllLog(@PathVariable(value = "begin") String begin) {
         try {
-            SSHUtils gsa = new SSHUtils("192.168.164.17", "datatrans", "7Tran6S%2021ngDC!", 22);
+            SSHUtils gsa = new SSHUtils("192.168.164.17", "webdb", "76_wEb%2021@nGdC", 22);
             String path = "/data1/webdb/webServer_idog/update/apache-tomcat-8.5.82_dogsdv3/logs";
             String toPath = "/disk/webdb/csdb/logs/doglogs";
             Vector logList= gsa.listFiles(path);
