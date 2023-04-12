@@ -55,6 +55,7 @@ public class logFtpController {
         this.redAllLog(begin);
         this.ftp123AllLog(begin);
         this.ftp124AllLog(begin);
+        this.ftp21AllLog(begin);
         this.loginfo(begin);
         this.bigdinfo(begin);
         this.ngdcloginfo(begin);
@@ -408,6 +409,31 @@ public class logFtpController {
         }
         System.out.println("123 log trans ok");
     }
+    @GetMapping("/log-ftp21/{begin}")
+    public void ftp21AllLog(@PathVariable(value = "begin") String begin){
+        try {
+            SSHUtils gsa = new SSHUtils("192.168.166.21", "gsagroup", "gsa@ngdc21$2023!", 22);
+            String path = "/var/log/vsftpd/";
+            String toPath1 = "/disk/webdb/csdb/logs/ftp21logs";
+            String toPath2 = "/disk/webdb/csdb/logs/ftpngdc21logs";
+            Vector logList= gsa.listFiles(path);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            List dataList = getBetweenDates(sdf.parse(begin),new Date());
+            for(int i = 0;i<dataList.size();i++) {
+                Date date = (Date) dataList.get(i);
+                SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+                String strDate = sf.format(date);
+                String fileName = "xferlog"+"-"+strDate;
+                gsa.downloadFile(path+"/"+fileName,toPath1);
+                gsa.downloadFile(path+"/"+fileName,toPath2);
+            }
+            gsa.closeSession();
+        } catch (Exception e) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.21，ftp21日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
+        }
+        System.out.println("124 log trans ok");
+    }
     @GetMapping("/log-ftp124/{begin}")
     public void ftp124AllLog(@PathVariable(value = "begin") String begin){
         try {
@@ -598,7 +624,7 @@ public class logFtpController {
                 Date date = (Date) dataList.get(i);
                 SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
                 String strDate = sf.format(date);
-                String strCp = "cat /disk/webdb/csdb/logs/ftp123logs/xferlog-"+strDate+" /disk/webdb/csdb/logs/ftp124logs/xferlog-"+strDate+" >/disk/webdb/csdb/logs/ftplogs/xferlog-"+strDate+".txt" ;
+                String strCp = "cat /disk/webdb/csdb/logs/ftp123logs/xferlog-"+strDate+" /disk/webdb/csdb/logs/ftp124logs/xferlog-"+strDate+" /disk/webdb/csdb/logs/ftp21logs/xferlog-"+strDate+" >/disk/webdb/csdb/logs/ftplogs/xferlog-"+strDate+".txt" ;
                 System.out.println(strCp);
                 gsa.execCommandByJSch(strCp);
                 Thread.sleep(5000);
@@ -622,7 +648,7 @@ public class logFtpController {
                 Date date = (Date) dataList.get(i);
                 SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
                 String strDate = sf.format(date);
-                String strCp = "cat /disk/webdb/csdb/logs/ftpngdc123logs/xferlog-"+strDate+" /disk/webdb/csdb/logs/ftpngdc124logs/xferlog-"+strDate+" >/disk/webdb/csdb/logs/ftpngdclogs/xferlog-"+strDate+".txt" ;
+                String strCp = "cat /disk/webdb/csdb/logs/ftpngdc123logs/xferlog-"+strDate+" /disk/webdb/csdb/logs/ftpngdc124logs/xferlog-"+strDate+" /disk/webdb/csdb/logs/ftpngdc21logs/xferlog-"+strDate+" >/disk/webdb/csdb/logs/ftpngdclogs/xferlog-"+strDate+".txt" ;
                 System.out.println(strCp);
                 gsa.execCommandByJSch(strCp);
                 Thread.sleep(5000);
