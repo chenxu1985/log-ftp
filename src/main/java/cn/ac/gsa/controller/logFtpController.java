@@ -432,12 +432,12 @@ public class logFtpController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
             SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.21，ftp21日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
-        System.out.println("124 log trans ok");
+        System.out.println("121 log trans ok");
     }
     @GetMapping("/log-ftp124/{begin}")
     public void ftp124AllLog(@PathVariable(value = "begin") String begin){
         try {
-            SSHUtils gsa = new SSHUtils("192.168.166.14", "ftpTransfer", "ftp@124¥2023&Transfer", 22);
+            SSHUtils gsa = new SSHUtils("192.168.166.14", "ftpTransfer", "ftp$&Transfer124¥2023", 22);
             String path = "/var/log/vsftpd/";
             String toPath1 = "/disk/webdb/csdb/logs/ftp124logs";
             String toPath2 = "/disk/webdb/csdb/logs/ftpngdc124logs";
