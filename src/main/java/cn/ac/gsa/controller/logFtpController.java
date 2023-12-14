@@ -43,6 +43,7 @@ public class logFtpController {
         this.edkAllLog(begin);
         this.humanAllLog(begin);
         this.gsubAllLog(begin);
+        this.omixAllLog(begin);
         this.gvmAllLog(begin);
         this.gwasAllLog(begin);
         this.gwhAllLog(begin);
@@ -221,6 +222,22 @@ public class logFtpController {
         } catch (Exception e) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
             SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，gsub日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
+        }
+        System.out.println("gsub log trans ok");
+    }
+    @GetMapping("/log-omix/{begin}")
+    public void omixAllLog(@PathVariable(value = "begin") String begin){
+        try {
+            SSHUtils gsa = new SSHUtils("192.168.164.20", "gsagroup", "gsa@big35$2019!", 22);
+            String path = "/webdb/gsagroup/webApplications/omix_20200914/logs";
+            String toPath = "/disk/webdb/csdb/logs/omixlogs";
+            Vector logList= gsa.listFiles(path);
+            HashMap nameMap= getOmixNameMap(logList,"omix");
+            int v = downloadFile(path,toPath,begin,gsa,nameMap);
+            gsa.closeSession();
+        } catch (Exception e) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，omix日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("gsub log trans ok");
     }
@@ -742,6 +759,31 @@ public class logFtpController {
         }
         return nameMap;
     }
+
+
+    public HashMap getOmixNameMap(Vector fileList,String h_name){
+        HashMap nameMap = new HashMap();
+        HashMap datamap = new HashMap();
+        int length = 0;
+        for(Object v : fileList){
+            ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry)v;
+            String file_name = lsEntry.getFilename();
+            if(file_name.contains(h_name+".")&&file_name.contains(".log")){
+                String data_name = file_name.split("\\.")[1];
+                nameMap.put(data_name,file_name);
+                if(datamap.size()!=0) {
+                    String data_name_old = datamap.get("data").toString();
+                    if(data_name.compareTo(data_name_old)>0) {
+                        datamap.put("data",data_name);
+                    }
+                } else {
+                    datamap.put("data",data_name);
+                }
+                length++;
+            }
+        }
+        return nameMap;
+    }
     public int downloadFile(String path,String toPath,String begin,SSHUtils sshUtils,HashMap nameMap) {
         for (Object key : nameMap.keySet()){
 			String strKey = (String)key;
@@ -900,6 +942,37 @@ public class logFtpController {
         }catch (Exception e) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
             SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，gsaHumanUpload文件备份失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
+        }
+    }
+    @GetMapping("/mailTest")
+    public void mailTest(){
+        String title="Waiting for DAC review";
+        String userName = "hongmei Wang";
+        String requestAcc = "HREQ005271";
+        String studyAcc = "HRA001965";
+        String toemail = "wanghm@ioz.ac.cn";
+        try{
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String dateStr = sdf.format(date);
+
+            StringBuffer sb = new StringBuffer();
+            sb.append("Dear "+userName+",<br/><br/>");
+            sb.append("A request named "+requestAcc+" has been sent to you because you are the DAC contactor of Study "+studyAcc+".<br/><br/>");
+            sb.append("Please login in GSA-Human (https://ngdc.cncb.ac.cn/gsa-human) and go to the <b>Request-> My Received Request</b> to check the request in time.<br/><br/>");
+
+            sb.append("Note: Please make sure that you have obtained the record number about this dataset from " +
+                    "the Administration Service Platform (https://fuwu.most.gov.cn) when you agree the request.<br/><br/>");
+            sb.append("* This is an automated message, Please do not reply to this email. If you have any question, please contact gsa@big.ac.cn.<br/><br/>");
+            sb.append("---------------------------------------------------------------------------------<br/>");
+            sb.append("Thanks.<br/>");
+            sb.append("The GSA-Human Team<br/>");
+            sb.append(dateStr).append("<br/><br/>");
+
+            SendEmail.send(toemail, title, sb.toString());
+
+        }catch(Exception ex){
+            ex.printStackTrace();
         }
     }
     public static String getStackTraceInfo(Throwable ex){
