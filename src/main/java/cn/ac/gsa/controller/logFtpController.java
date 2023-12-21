@@ -228,8 +228,8 @@ public class logFtpController {
     @GetMapping("/log-omix/{begin}")
     public void omixAllLog(@PathVariable(value = "begin") String begin){
         try {
-            SSHUtils gsa = new SSHUtils("192.168.164.20", "gsagroup", "gsa@big35$2019!", 22);
-            String path = "/webdb/gsagroup/webApplications/omix_20200914/logs";
+            SSHUtils gsa = new SSHUtils("192.168.164.105", "gsagroup", "gsa@ngdc105$2023!", 22);
+            String path = "/webdb/gsagroup/webApplications/omix_20200914/tomcatlogs";
             String toPath = "/disk/webdb/csdb/logs/omixlogs";
             Vector logList= gsa.listFiles(path);
             HashMap nameMap= getOmixNameMap(logList,"omix");
@@ -237,9 +237,9 @@ public class logFtpController {
             gsa.closeSession();
         } catch (Exception e) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，omix日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.20，omix日志获取失败请联系王安可"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
-        System.out.println("gsub log trans ok");
+        System.out.println("omix log trans ok");
     }
     @GetMapping("/log-gvm/{begin}")
     public void gvmAllLog(@PathVariable(value = "begin") String begin){
@@ -768,7 +768,7 @@ public class logFtpController {
         for(Object v : fileList){
             ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry)v;
             String file_name = lsEntry.getFilename();
-            if(file_name.contains(h_name+".")&&file_name.contains(".log")){
+            if(file_name.contains(h_name+"_")&&file_name.contains(".log")){
                 String data_name = file_name.split("\\.")[1];
                 nameMap.put(data_name,file_name);
                 if(datamap.size()!=0) {
