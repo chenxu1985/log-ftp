@@ -454,7 +454,7 @@ public class logFtpController {
     @GetMapping("/log-ftp124/{begin}")
     public void ftp124AllLog(@PathVariable(value = "begin") String begin){
         try {
-            SSHUtils gsa = new SSHUtils("192.168.166.14", "ftpTransfer", "ftp$&Transfer124¥2023", 22);
+            SSHUtils gsa = new SSHUtils("192.168.166.14", "ftpTransfer", "ftp%&Tra124¥2024@", 22);
             String path = "/var/log/vsftpd/";
             String toPath1 = "/disk/webdb/csdb/logs/ftp124logs";
             String toPath2 = "/disk/webdb/csdb/logs/ftpngdc124logs";
