@@ -454,7 +454,7 @@ public class logFtpController {
     @GetMapping("/log-ftp124/{begin}")
     public void ftp124AllLog(@PathVariable(value = "begin") String begin){
         try {
-            SSHUtils gsa = new SSHUtils("192.168.166.14", "ftpTransfer", "ftp%&Tra124¥2024@", 22);
+            SSHUtils gsa = new SSHUtils("192.168.166.14", "ftpTransfer", "ftp!&^2024Tras124¥!", 22);
             String path = "/var/log/vsftpd/";
             String toPath1 = "/disk/webdb/csdb/logs/ftp124logs";
             String toPath2 = "/disk/webdb/csdb/logs/ftpngdc124logs";
@@ -472,7 +472,7 @@ public class logFtpController {
             gsa.closeSession();
         } catch (Exception e) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            SendEmail.send("chenx@big.ac.cn", "IP：192.168.164.14，ftp124日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
+            SendEmail.send("chenx@big.ac.cn", "IP：192.168.166.14，ftp124日志获取失败请联系陈旭"+dateFormat.format(new Date()), getStackTraceInfo(e));
         }
         System.out.println("124 log trans ok");
     }
@@ -946,29 +946,22 @@ public class logFtpController {
     }
     @GetMapping("/mailTest")
     public void mailTest(){
-        String title="Waiting for DAC review";
-        String userName = "hongmei Wang";
-        String requestAcc = "HREQ005271";
+        String title="INSDC同步提醒-Sample-20240112";
+        String userName = "陈旭";
+        String requestAcc = "20240112";
         String studyAcc = "HRA001965";
-        String toemail = "wanghm@ioz.ac.cn";
+        String toemail = "chenx@big.ac.cn";
         try{
             Date date = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String dateStr = sdf.format(date);
 
             StringBuffer sb = new StringBuffer();
-            sb.append("Dear "+userName+",<br/><br/>");
-            sb.append("A request named "+requestAcc+" has been sent to you because you are the DAC contactor of Study "+studyAcc+".<br/><br/>");
-            sb.append("Please login in GSA-Human (https://ngdc.cncb.ac.cn/gsa-human) and go to the <b>Request-> My Received Request</b> to check the request in time.<br/><br/>");
-
-            sb.append("Note: Please make sure that you have obtained the record number about this dataset from " +
-                    "the Administration Service Platform (https://fuwu.most.gov.cn) when you agree the request.<br/><br/>");
-            sb.append("* This is an automated message, Please do not reply to this email. If you have any question, please contact gsa@big.ac.cn.<br/><br/>");
+            sb.append(""+userName+",<br/><br/>");
+            sb.append("日期为"+requestAcc+"的BioSample同步成功 同步时间：2024-01-13 03:08:24.<br/><br/>");
             sb.append("---------------------------------------------------------------------------------<br/>");
             sb.append("Thanks.<br/>");
-            sb.append("The GSA-Human Team<br/>");
-            sb.append(dateStr).append("<br/><br/>");
-
+            sb.append("The GSA Team<br/>");
             SendEmail.send(toemail, title, sb.toString());
 
         }catch(Exception ex){
