@@ -276,7 +276,7 @@ public class logFtpController {
     @GetMapping("/log-gwh/{begin}")
     public void gwhAllLog(@PathVariable(value = "begin") String begin) {
         try {
-            SSHUtils gsa = new SSHUtils("192.168.164.91", "gwh", "nTm9#Zbv?C9Z6tQp", 22);
+            SSHUtils gsa = new SSHUtils("192.168.164.91", "gwh", "H2hMBV5#AyS$hKX&", 22);
             String path = "/disk/gwh/access_logs";
             String toPath = "/disk/webdb/csdb/logs/gwhlogs";
             Vector logList= gsa.listFiles(path);
